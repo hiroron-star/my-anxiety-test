@@ -1,15 +1,16 @@
-/* fonts */
+/* 全体フォントと背景色 */
 body {
   font-family: 'Noto Sans JP', sans-serif;
   background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
 /* ヒーローセクション */
 .hero-section {
   position: relative;
-  min-height: 70vh;
-  /* 背景画像を変更する場合はURLを差し替え */
-  background: url('https://images.unsplash.com/photo-1513543800643-6d1df2c8a7d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+  min-height: 60vh;
+  background: url('https://images.unsplash.com/photo-1583636559531-29804dec4362?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
               center center / cover no-repeat;
   color: #fff;
   display: flex;
@@ -20,16 +21,16 @@ body {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
 }
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
 }
 .hero-content h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
@@ -38,12 +39,74 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* テストセクション */
-#test-section {
-  padding: 60px 0;
+/* 質問カード */
+.question-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.question-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.4;
 }
 
-/* カードフェードインアニメ */
+/* 選択肢ボタンUI */
+.btn-choice-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-check {
+  display: none;
+}
+
+/* デフォルト状態はあまり色付けしない */
+.btn-choice {
+  min-width: 60px;
+  font-size: 1rem;
+  border-radius: 25px;
+  color: #000; 
+  background-color: #e0e0e0;
+  border: none;
+  font-weight: 600;
+}
+
+/* 押したときだけ色が付く */
+/* 1=紫,2=薄紫,3=グレー,4=薄緑,5=濃い緑 */
+.btn-check:checked + label.btn-choice-1 {
+  background-color: #7a3dad;
+  color: #fff;
+  box-shadow: 0 0 5px #7a3dad;
+}
+.btn-check:checked + label.btn-choice-2 {
+  background-color: #b695c0;
+  color: #fff;
+  box-shadow: 0 0 5px #b695c0;
+}
+.btn-check:checked + label.btn-choice-3 {
+  background-color: #888;
+  color: #fff;
+  box-shadow: 0 0 5px #888;
+}
+.btn-check:checked + label.btn-choice-4 {
+  background-color: #9cc89c;
+  color: #fff;
+  box-shadow: 0 0 5px #9cc89c;
+}
+.btn-check:checked + label.btn-choice-5 {
+  background-color: #2e7d32;
+  color: #fff;
+  box-shadow: 0 0 5px #2e7d32;
+}
+
+/* カードアニメ */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -62,19 +125,7 @@ body {
   margin-top: 30px;
 }
 
-/* 質問タイトル */
-.question-title {
-  font-weight: 700;
-  margin-bottom: 10px;
-  font-size: 1.1rem;
-}
-
-/* 選択肢のマージン */
-.score-option {
-  margin-right: 10px;
-}
-
-/* 各タイプの得点表示 */
+/* 結果タイプの強調 */
 .type-score {
   font-weight: 700;
   color: #d9534f;

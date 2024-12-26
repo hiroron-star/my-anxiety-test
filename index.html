@@ -2,15 +2,14 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>8つの不安タイプ診断テスト - Enhanced</title>
+  <title>8つの不安タイプ診断テスト</title>
 
-  <!-- Bootstrap 5 CSS -->
+  <!-- Bootstrap 5 -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
   >
-
-  <!-- Google Fonts (例: Noto Sans JP) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -18,7 +17,7 @@
     rel="stylesheet"
   >
 
-  <!-- 独自のCSSファイル -->
+  <!-- 独自CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,31 +27,31 @@
   <div class="hero-overlay"></div>
   <div class="hero-content text-center text-white">
     <h1>8つの不安タイプ診断テスト</h1>
-    <p>あなたの不安の傾向をセルフチェック！<br>
-       20問に答えるだけで今の状態を把握しましょう。</p>
-    <button class="btn btn-warning btn-lg" onclick="scrollToTestSection()">
+    <p class="mb-3">20の質問（5段階評価：1＝まったく当てはまらない、5＝非常に当てはまる）</p>
+    <button class="btn btn-warning btn-lg" onclick="showQuestionSection()">
       今すぐ診断を始める
     </button>
   </div>
 </section>
 
-<!-- 診断テストセクション -->
-<section id="test-section" class="container">
-  <div class="text-center mb-5">
-    <h2>診断質問に答えてみよう</h2>
-    <p>1～5のスコアで回答してください。（1＝当てはまらない、5＝非常に当てはまる）</p>
+<!-- 質問セクション（初期非表示） -->
+<section id="question-section" class="container my-5" style="display: none;">
+  <div class="text-center mb-4">
+    <h2>質問に答えてみよう</h2>
+    <p class="text-muted">数字が高いほど「当てはまる」度合いが強い</p>
   </div>
 
-  <div class="row row-cols-1 row-cols-md-2 g-4" id="questionContainer">
-    <!-- 質問カードがここに挿入される (script.js) -->
+  <!-- 質問を表示する領域 -->
+  <div id="questionContainer" class="d-flex flex-column gap-4">
+    <!-- script.jsで生成 -->
   </div>
 
-  <div class="text-center mt-4">
+  <div class="text-center mt-5">
     <button class="btn btn-primary btn-lg" onclick="submitAnswers()">診断する</button>
   </div>
 
-  <!-- 結果表示カード -->
-  <div id="resultCard" class="card shadow mt-5 fade-in">
+  <!-- 結果カード -->
+  <div id="resultCard" class="card shadow mt-5 fade-in" style="display: none;">
     <div class="card-body">
       <h3 class="card-title mb-3">診断結果</h3>
       <div id="resultText"></div>
@@ -65,8 +64,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- メインロジック（別ファイル） -->
+<!-- メインロジック -->
 <script src="script.js"></script>
-
 </body>
 </html>

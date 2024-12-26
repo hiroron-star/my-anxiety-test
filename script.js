@@ -1,17 +1,12 @@
 /************************************************************
  * script.js
- * (1) ボタンで下部へスクロール
- * (2) 質問カード生成
- * (3) 回答を集計して表示
+ * - 質問を生成
+ * - 「今すぐ診断」クリックで表示
+ * - ボタン押下で色が付く (checked)
+ * - submitAnswersでスコア集計、結果1つだけ判定
  ************************************************************/
 
-// (1) ヒーローの「今すぐ診断を始める」ボタン
-function scrollToTestSection(){
-  const testSection = document.getElementById('test-section');
-  testSection.scrollIntoView({ behavior: 'smooth' });
-}
-
-// (2) 質問データ & カード生成
+// 質問データ
 const questionsData = [
   { id:1, text:'「先々のこと」を考えて、根拠のない不安や焦りに襲われることが多い。', type:'future' },
   { id:2, text:'人前で意見を言う場面を想像するだけで、体がこわばる。', type:'social' },
@@ -35,54 +30,101 @@ const questionsData = [
   { id:20, text:'休みの日でも「本当に休んでいていいのか…」と不安になり休めない。', type:'pressure' },
 ];
 
-const typeNames = {
-  future:       "未来予報ビクビク型（将来不安）",
-  social:       "人間関係オロオロ型（対人不安）",
-  evaluation:   "評価ドキドキ型（評価不安）",
-  perfection:   "完璧主義パニック型（完璧主義）",
-  health:       "健康オタオタ型（健康不安）",
-  existential:  "存在意義グラグラ型（存在論的不安）",
-  trauma:       "トラウマシンドローム型（トラウマ起因）",
-  pressure:     "プレッシャー爆発型（高ストレス環境）"
+// 8タイプ & 簡易説明
+const typeDefinitions = {
+  future: {
+    name: "未来予報ビクビク型（将来不安）",
+    detail: `主に質問: 1, 3, 11 → 高得点なら将来への漠然とした不安が強い`
+  },
+  social: {
+    name: "人間関係オロオロ型（対人不安）",
+    detail: `質問: 2, 4, 12, 18 → 人前での緊張や他人の反応を過剰に気にしがち`
+  },
+  evaluation: {
+    name: "評価ドキドキ型（評価不安）",
+    detail: `質問: 5, 19 → 他者の評価やネガティブな反応に強い恐怖を感じる`
+  },
+  perfection: {
+    name: "完璧主義パニック型（完璧主義）",
+    detail: `質問: 6, 13 → ミスや不完全さを強く恐れ、自分を追い込む`
+  },
+  health: {
+    name: "健康オタオタ型（健康不安）",
+    detail: `質問: 7, 14 → 体調や検査結果に過度な疑いと不安`
+  },
+  existential: {
+    name: "存在意義グラグラ型（存在論的不安）",
+    detail: `質問: 8, 15 → 生きる意味、死の恐怖への不安が強い`
+  },
+  trauma: {
+    name: "トラウマシンドローム型（トラウマ起因）",
+    detail: `質問: 9, 16 → 過去の傷がフラッシュバックし、感情や行動に影響`
+  },
+  pressure: {
+    name: "プレッシャー爆発型（高ストレス環境）",
+    detail: `質問: 10, 17, 20 → 仕事量や周囲からの期待で心身が限界に近い`
+  },
 };
 
-// ページ読み込み時：質問カード生成
-window.addEventListener('DOMContentLoaded', () => {
-  const questionContainer = document.getElementById('questionContainer');
-  questionsData.forEach((q) => {
-    // カラム + Card
-    const col = document.createElement('div');
-    col.className = "col fade-in";
+/** 最初にヒーローだけ表示 → 今すぐ診断でここが呼ばれる */
+function showQuestionSection(){
+  const section = document.getElementById('question-section');
+  section.style.display = 'block';
+  generateQuestions(); // 質問カード生成
+  section.scrollIntoView({ behavior:'smooth' });
+}
 
-    // カードHTML
-    col.innerHTML = `
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5 class="question-title mb-2">Q${q.id}. ${q.text}</h5>
-          <div class="mb-2">
-            ${[1,2,3,4,5].map(score => `
-              <label class="score-option">
-                <input type="radio" name="Q${q.id}" value="${score}"> ${score}
-              </label>
-            `).join('')}
-          </div>
-        </div>
+/** 質問カード生成: 1問1枠、ボタン(1~5) */
+function generateQuestions(){
+  const container = document.getElementById('questionContainer');
+  if(container.children.length > 0) return; // 2度目の呼び出し防止
+
+  questionsData.forEach(q => {
+    // カード
+    const cardDiv = document.createElement('div');
+    cardDiv.className = "question-card fade-in";
+
+    // 1~5の選択肢: 全て同じ幅のカードに
+    // クリック時だけ色を付けたい→ :checked + label で対応
+    let choicesHtml = '';
+    for(let score=1; score<=5; score++){
+      choicesHtml += createRadioButtonHTML(q.id, score);
+    }
+
+    cardDiv.innerHTML = `
+      <div class="question-title mb-3">Q${q.id}. ${q.text}</div>
+      <div class="btn-choice-group">
+        ${choicesHtml}
       </div>
     `;
 
-    questionContainer.appendChild(col);
+    container.appendChild(cardDiv);
   });
-});
+}
 
-// (3) 回答送信
+/** ラジオボタン＋labelを生成する関数 */
+function createRadioButtonHTML(qId, score){
+  // ボタンに付与するクラス（押したら色が付くのは :checked + label）
+  const colorClass = `btn-choice-${score}`;
+  // 例: "Q1-1" などのid
+  const inputId = `Q${qId}-${score}`;
+
+  return `
+    <input type="radio" class="btn-check" name="Q${qId}" id="${inputId}" value="${score}">
+    <label for="${inputId}" class="btn btn-choice ${colorClass}">${score}</label>
+  `;
+}
+
+/** 回答送信 -> 集計 */
 function submitAnswers(){
+  // 集計オブジェクト
   let scores = {
     future:0, social:0, evaluation:0, perfection:0,
     health:0, existential:0, trauma:0, pressure:0
   };
 
-  for(let i=0; i<questionsData.length; i++){
-    const q = questionsData[i];
+  // 全質問に対して回答を取得
+  for(const q of questionsData){
     const radios = document.getElementsByName(`Q${q.id}`);
     let val = 0;
     for(const r of radios){
@@ -98,39 +140,43 @@ function submitAnswers(){
     scores[q.type] += val;
   }
 
-  displayResult(scores);
+  // 最高スコアのタイプ1つを判定
+  let maxType = null;
+  let maxScore = -1;
+  for(let t in scores){
+    if(scores[t] > maxScore){
+      maxScore = scores[t];
+      maxType = t;
+    }
+  }
+
+  showResult(maxType, maxScore);
 }
 
-/** 結果を表示してスクロール */
-function displayResult(scores){
+/** 結果表示: 1つだけ「あなたはXXタイプです！」 */
+function showResult(type, score){
   const resultCard = document.getElementById('resultCard');
   const resultText = document.getElementById('resultText');
   const resultAdvice = document.getElementById('resultAdvice');
 
-  // 各タイプの得点リスト
-  let html = `<ul class="list-group">`;
-  for(let t in scores){
-    html += `
-      <li class="list-group-item">
-        <span class="type-score">${typeNames[t]}:</span>
-         ${scores[t]} 点
-      </li>
-    `;
-  }
-  html += `</ul>`;
+  // 選ばれたタイプの情報
+  const td = typeDefinitions[type];
 
-  resultText.innerHTML = html;
+  // "あなたは 〇〇です！" とその説明
+  resultText.innerHTML = `
+    <h4 class="mb-3" style="font-weight:bold;">
+      あなたは「${td.name}」です！
+    </h4>
+    <p class="mb-2 text-muted">（スコア: ${score}）</p>
+    <p>${td.detail}</p>
+  `;
 
   resultAdvice.innerHTML = `
     <p class="mt-3">
-      高得点のタイプが複数ある場合、複合的な不安が絡み合っているかもしれません。<br>
-      深刻だと感じるときは専門家へ相談を検討してみてください。
+      不安が強いと感じる場合は専門家（医療機関、カウンセリング）への相談を検討しましょう。
     </p>
   `;
 
-  // カードを表示
   resultCard.style.display = 'block';
-
-  // スクロールして結果部分へ
   resultCard.scrollIntoView({ behavior:'smooth' });
 }
