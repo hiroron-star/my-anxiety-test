@@ -2,43 +2,71 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>8つの不安タイプ診断テスト</title>
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- 独自CSS -->
-  <link rel="stylesheet" href="anxiety_styles.css">
+  <title>8つの不安タイプ診断テスト - Enhanced</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <!-- Google Fonts (例: Noto Sans JP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- 独自のCSSファイル -->
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="container py-4">
+<body>
 
-  <h1 class="text-center mb-4">8つの不安タイプ診断テスト</h1>
-  <p class="text-center mb-4">
-    以下の20問に<span class="fw-bold">1～5</span>のスコアで回答してください。<br>
-    （1＝まったく当てはまらない、5＝非常に当てはまる）
-  </p>
+<!-- ヒーローセクション -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content text-center text-white">
+    <h1>8つの不安タイプ診断テスト</h1>
+    <p>あなたの不安の傾向をセルフチェック！<br>
+       20問に答えるだけで今の状態を把握しましょう。</p>
+    <button class="btn btn-warning btn-lg" onclick="scrollToTestSection()">
+      今すぐ診断を始める
+    </button>
+  </div>
+</section>
 
-  <div id="layout-container">
-    <!-- 質問パネル -->
-    <div id="question-panel">
-      <div id="question-container">
-        <!-- JavaScriptで質問を生成 -->
-      </div>
-      <button class="btn btn-primary" onclick="submitAnswers()">診断する</button>
-    </div>
-
-    <!-- 結果パネル -->
-    <div id="result-panel">
-      <div id="resultSection" class="result-section">
-        <h2>診断結果</h2>
-        <div id="resultText"></div>
-        <div id="resultAdvice" class="mt-3"></div>
-      </div>
-    </div>
+<!-- 診断テストセクション -->
+<section id="test-section" class="container">
+  <div class="text-center mb-5">
+    <h2>診断質問に答えてみよう</h2>
+    <p>1～5のスコアで回答してください。（1＝当てはまらない、5＝非常に当てはまる）</p>
   </div>
 
-  <!-- Bootstrap JS (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="row row-cols-1 row-cols-md-2 g-4" id="questionContainer">
+    <!-- 質問カードがここに挿入される (script.js) -->
+  </div>
 
-  <!-- メインロジック -->
-  <script src="anxiety_logic.js"></script>
+  <div class="text-center mt-4">
+    <button class="btn btn-primary btn-lg" onclick="submitAnswers()">診断する</button>
+  </div>
+
+  <!-- 結果表示カード -->
+  <div id="resultCard" class="card shadow mt-5 fade-in">
+    <div class="card-body">
+      <h3 class="card-title mb-3">診断結果</h3>
+      <div id="resultText"></div>
+      <hr>
+      <div id="resultAdvice" class="mt-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- メインロジック（別ファイル） -->
+<script src="script.js"></script>
+
 </body>
 </html>

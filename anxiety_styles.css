@@ -1,54 +1,81 @@
-/* 背景やフォント設定 */
+/* fonts */
 body {
-    background-color: #f7f7f7;
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* ヒーローセクション */
+.hero-section {
+  position: relative;
+  min-height: 70vh;
+  /* 背景画像を変更する場合はURLを差し替え */
+  background: url('https://images.unsplash.com/photo-1513543800643-6d1df2c8a7d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+              center center / cover no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* テストセクション */
+#test-section {
+  padding: 60px 0;
+}
+
+/* カードフェードインアニメ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* 質問カードの装飾 */
-  .question-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 5px;
-  }
-  .question-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  /* 結果表示エリア */
-  .result-section {
-    display: none; /* 初期は非表示 */
-    background-color: #fff;
-    border: 1px solid #ddd;
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 5px;
-  }
-  
-  /* スコア選択 */
-  .score-option {
-    margin-right: 10px;
-  }
-  
-  /* 8つのタイプのスコア表示 */
-  .type-score {
-    font-weight: bold;
-    color: #d9534f; /* 赤系 */
-  }
-  
-  /* 16personalities風の段組みレイアウト例 */
-  #layout-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  #question-panel, #result-panel {
-    flex: 1 1 100%;
-    margin: 10px;
-  }
-  @media(min-width: 992px) {
-    #question-panel, #result-panel {
-      flex: 1 1 45%;
-    }
-  }
-  
+}
+
+/* 結果カード初期非表示 */
+#resultCard {
+  display: none;
+  margin-top: 30px;
+}
+
+/* 質問タイトル */
+.question-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* 選択肢のマージン */
+.score-option {
+  margin-right: 10px;
+}
+
+/* 各タイプの得点表示 */
+.type-score {
+  font-weight: 700;
+  color: #d9534f;
+}
